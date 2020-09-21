@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="build_all">
+
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<RootNamespaces>Decisions.Docusign</RootNamespaces>
+		<AssemblyName>Decisions.Docusign</AssemblyName>
+		<CreateModule>..\..\..\output\binutils\CreateModule.exe</CreateModule>
+		<TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+		<OutputPath>..\..\..\modules\Decisions.Docusign\Decisions.Docusign\bin\Debug</OutputPath>
+		<Configuration>Debug</Configuration>
+		<BuildDest>..\..\..\output\binservices</BuildDest>
+		<LibPath>..\..\..\lib</LibPath>
+	</PropertyGroup>
+	
+	<Target Name="build_all">
+		<CallTarget Targets="clean"/>
+		<CallTarget Targets="Build"/>
+	</Target>
+	
+	<Target Name="clean">
+		<RemoveDir Directories=".\obj\" ContinueOnError="true"/>
+	</Target>
+	
+	<ItemGroup>
+		<Compile Include="**\*.cs" Exclude="obj\**.*"/>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Reference Include="..\..\..\lib\decisions\DecisionsFramework.dll" />
+	</ItemGroup>
+	
+	<Import Project="$(LibPath)\msbuild\decisions.net.Targets" />
+	
+	
+	<Target Name="AfterBuild">
+		<Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll" DestinationFolder="$(BuildDest)" />
+	</Target> 
+	
+</Project>

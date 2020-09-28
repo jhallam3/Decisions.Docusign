@@ -7,6 +7,8 @@ using DecisionsFramework.Design.Flow;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using DecisionsFramework.Design.Flow.StepImplementations;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace Decisions.Docusign
 {
@@ -29,8 +31,25 @@ namespace Decisions.Docusign
                 return dsClient.RequestStatus(envelopeId).Status.ToString();
             }
 
-        }          
-        
+        }
+
+        public static Docusign.DataTypes.DocuSignEnvelopeInformation DeserialiseDocusignEnvelopeInformation(string XML)
+        {
+            try
+            {
+
+
+                var result = (Decisions.Docusign.DataTypes.DocuSignEnvelopeInformation)new XmlSerializer(typeof(Decisions.Docusign.DataTypes.DocuSignEnvelopeInformation), "http://www.docusign.net/API/3.0").Deserialize(new StringReader(XML));
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
         public static FileData GetSignedDocument(string envelopeId, [IgnoreMappingDefault] DocusignCredentials overrideCredentials = null)
         {
             IDocusignCreds creds = overrideCredentials as IDocusignCreds ?? DSServiceClientFactory.DsSettings;

@@ -2,11 +2,11 @@
 
 <CreateModuleInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Clients>
-    <DotNetCoreDll>.\packages\DecisionsSDK.6.8.0\lib\CoreServicesClients.Net.dll</DotNetCoreDll>
-    <DotNetFrontendFrameworkDll>.\packages\DecisionsSDK.6.8.0\lib\DecisionsFramework.Net.dll</DotNetFrontendFrameworkDll>
-    <SLCoreDll></SLCoreDll>
-    <SLFrontendFrameworkDll></SLFrontendFrameworkDll>
-    <SilverLightsSDKAssembliesPath></SilverLightsSDKAssembliesPath>
+    <DotNetCoreDll>C:\Program Files\Decisions\Decisions Services Manager\framework\CoreServicesClients.Net.dll</DotNetCoreDll>
+    <DotNetFrontendFrameworkDll>C:\Program Files\Decisions\Decisions Services Manager\framework\DecisionsFramework.Net.dll</DotNetFrontendFrameworkDll>
+    <SLCoreDll>..\..\lib\CoreServicesClients.SL.dll</SLCoreDll>
+    <SLFrontendFrameworkDll>..\..\output\bincore\DecisionsFramework.SL.dll</SLFrontendFrameworkDll>
+    <SilverLightsSDKAssembliesPath>C:\Program Files\Decisions\Decisions Services Manager\SilverLightAssemblies</SilverLightsSDKAssembliesPath>
     <References/>
   </Clients>
   <Resources NoComponents="true">

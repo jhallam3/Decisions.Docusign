@@ -6,6 +6,7 @@ using DecisionsFramework.Data.DataTypes;
 using DecisionsFramework.Design.Flow;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using Decisions.Docusign.DSServiceReference;
 using DecisionsFramework.Design.Flow.StepImplementations;
 using System.Xml.Serialization;
 using System.IO;
@@ -13,10 +14,9 @@ using System.IO;
 namespace Decisions.Docusign
 {
 
-
     [AutoRegisterMethodsOnClass(true, "Integration", "Docusign")]
     public static class DocusignSteps
-    {        
+    {
         //Docusign API dev guide says this method is subject to call limit and should not be used more than once every 15 min per unique envelope ID
         public static string GetDocumentStatus(string envelopeId, [IgnoreMappingDefault] DocusignCredentials overrideCredentials = null)
         {
@@ -25,9 +25,9 @@ namespace Decisions.Docusign
             var dsClient = DSServiceClientFactory.GetDsClient(creds);
 
             using (var scope = new System.ServiceModel.OperationContextScope(dsClient.InnerChannel))
-            {                
+            {
                 OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = DSServiceClientFactory.GetAuthHeaderRequestProperty(creds);
-                
+
                 return dsClient.RequestStatus(envelopeId).Status.ToString();
             }
 
@@ -68,10 +68,31 @@ namespace Decisions.Docusign
                 }
 
                 return new FileData(string.Format("{0}.pdf", documentsPDFs.DocumentPDF[0].Name), documentsPDFs.DocumentPDF[0].PDFBytes);
-              
+
+            }
+        }
+
+        public static FileData GetCertificate(string envelopeId, [IgnoreMappingDefault] DocusignCredentials overrideCredentials = null)
+        {
+            IDocusignCreds creds = overrideCredentials as IDocusignCreds ?? DSServiceClientFactory.DsSettings;
+
+            DSAPIServiceSoapClient dsClient = DSServiceClientFactory.GetDsClient(creds);
+
+            using (OperationContextScope scope = new OperationContextScope(dsClient.InnerChannel))
+            {
+                OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = DSServiceClientFactory.GetAuthHeaderRequestProperty(creds);
+
+                var documentsPDFs = dsClient.RequestCertificate(envelopeId);
+
+                if (documentsPDFs == null || documentsPDFs.DocumentPDF == null || documentsPDFs.DocumentPDF.Length == 0)
+                {
+                    return null;
+                }
+
+                return new FileData($"{documentsPDFs.DocumentPDF[0].Name}.pdf", documentsPDFs.DocumentPDF[0].PDFBytes);
             }
 
         }
-                       
+
     }
 }
